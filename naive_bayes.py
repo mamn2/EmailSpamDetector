@@ -21,42 +21,27 @@ def trainClassifier(train_set, train_labels, laplace):
 
     # first value is for num words in spam mails, second is for num words in non-spam
     numWordsPerClass = [0, 0]
-    uniqueWordsPerClass = [0, 0]
 
     for i in range(0, len(train_labels)):
         for word in train_set[i]:
-            word = word.lower()
             if word in words:
                 words[word][train_labels[i]] += 1
                 numWordsPerClass[train_labels[i]] += 1
             else:
                 if train_labels[i] == 0:
                     words[word] = [1, 0]
-                    uniqueWordsPerClass[0] += 1
                 else:
                     words[word] = [0, 1]
-                    uniqueWordsPerClass[1] += 1
-            # print(word + str(words[word]))
-
-    # print(words['firewall'])
-    # print(words['to'])
-
+          
     probWordGivenClass = {}
 
-    uniqueWords = uniqueWordsPerClass[0] + uniqueWordsPerClass[1]
+    uniqueWords = len(words)
 
     for word in words:
         probWordGivenClass[(word, 0)] = math.log((words[word][0] + laplace) / (numWordsPerClass[0] + uniqueWords * laplace))
         probWordGivenClass[(word, 1)] = math.log((words[word][1] + laplace) / (numWordsPerClass[1] + uniqueWords * laplace))
 
-        #if words[word][1] > 10:
-        #    print(word + str(words[word]))
-
-    #print(uniqueWordsPerClass)
-    #print(numWordsPerClass)
-    #print(len(words))
-
-    return (probWordGivenClass, uniqueWordsPerClass, numWordsPerClass)
+    return (probWordGivenClass, uniqueWords, numWordsPerClass)
     
 
 def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior):
@@ -90,19 +75,13 @@ def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior)
     probHam = probHam / len(train_labels)
     probSpam = probSpam / len(train_labels)
 
-    probWordGivenClass, uniqueWordsPerClass, numWordsPerClass = trainClassifier(train_set, train_labels, smoothing_parameter)
-
-    #print(probWordGivenClass[('section', 0)])
-
+    probWordGivenClass, uniqueWords, numWordsPerClass = trainClassifier(train_set, train_labels, smoothing_parameter)
     dev_labels = []
-
-    uniqueWords = uniqueWordsPerClass[0] + uniqueWordsPerClass[1]
 
     for doc in dev_set:
         probHamGivenWord = math.log(pos_prior)
         probSpamGivenWord = math.log(1 - pos_prior)
         for word in doc:
-            #word = word.lower()
             if (word, 0) not in probWordGivenClass:
                 continue
             if probWordGivenClass[(word, 0)] == 0:
@@ -118,8 +97,6 @@ def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior)
             dev_labels.append(1)
         else:
             dev_labels.append(0)
-
-    #print(dev_labels)
-
+            
     return dev_labels
     
