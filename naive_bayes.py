@@ -102,7 +102,7 @@ def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior)
         probHamGivenWord = math.log(pos_prior)
         probSpamGivenWord = math.log(1 - pos_prior)
         for word in doc:
-            word = word.lower()
+            #word = word.lower()
             if (word, 0) not in probWordGivenClass:
                 continue
             if probWordGivenClass[(word, 0)] == 0:
