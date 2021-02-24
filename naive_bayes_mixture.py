@@ -25,10 +25,10 @@ def trainBigramClassifier(train_set, train_labels, laplace):
 
     for i in range(len(train_labels)):
         for j in range(len(train_set[i]) - 1):
-            bigram = (train_set[i][j], train_set[i][j + 1])
+            bigram = (train_set[i][j].lower(), train_set[i][j + 1].lower())
+            numBigramsPerClass[train_labels[i]] += 1
             if bigram in bigrams:
                 bigrams[bigram][train_labels[i]] += 1
-                numBigramsPerClass[train_labels[i]] += 1
             else:
                 if train_labels[i] == 0:
                     bigrams[bigram] = [1, 0]
@@ -54,9 +54,9 @@ def trainUnigramClassifier(train_set, train_labels, laplace):
 
     for i in range(0, len(train_labels)):
         for word in train_set[i]:
+            numWordsPerClass[train_labels[i]] += 1
             if word in words:
                 words[word][train_labels[i]] += 1
-                numWordsPerClass[train_labels[i]] += 1
             else:
                 if train_labels[i] == 0:
                     words[word] = [1, 0]
@@ -127,7 +127,7 @@ def naiveBayesMixture(train_set, train_labels, dev_set, bigram_lambda,unigram_sm
             #bigram
             if i == len(doc) - 1:
                 continue
-            bigram = (doc[i], doc[i + 1])
+            bigram = (doc[i].lower(), doc[i + 1].lower())
             if (bigram, 0) not in probBigramGivenClass:
                 continue
             if probBigramGivenClass[(bigram, 0)] == 0:

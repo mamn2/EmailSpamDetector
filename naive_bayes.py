@@ -22,11 +22,11 @@ def trainClassifier(train_set, train_labels, laplace):
     # first value is for num words in spam mails, second is for num words in non-spam
     numWordsPerClass = [0, 0]
 
-    for i in range(0, len(train_labels)):
+    for i in range(len(train_labels)):
         for word in train_set[i]:
+            numWordsPerClass[train_labels[i]] += 1
             if word in words:
                 words[word][train_labels[i]] += 1
-                numWordsPerClass[train_labels[i]] += 1
             else:
                 if train_labels[i] == 0:
                     words[word] = [1, 0]
@@ -63,19 +63,8 @@ def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior)
     # TODO: Write your code here
     # return predicted labels of development set
 
-    probHam = 0
-    probSpam = 0
-    
-    for label in train_labels:
-        if label == 0:
-            probSpam += 1
-        else:
-            probHam += 1
-    
-    probHam = probHam / len(train_labels)
-    probSpam = probSpam / len(train_labels)
-
     probWordGivenClass, uniqueWords, numWordsPerClass = trainClassifier(train_set, train_labels, smoothing_parameter)
+    
     dev_labels = []
 
     for doc in dev_set:
@@ -97,6 +86,6 @@ def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior)
             dev_labels.append(1)
         else:
             dev_labels.append(0)
-            
+
     return dev_labels
     
