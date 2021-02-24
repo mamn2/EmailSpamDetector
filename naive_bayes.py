@@ -52,12 +52,9 @@ def trainClassifier(train_set, train_labels, laplace):
         #if words[word][1] > 10:
         #    print(word + str(words[word]))
 
-    print(probWordGivenClass[("section", 0)])
-    print(probWordGivenClass[("confidential", 0)])
-
-    print(uniqueWordsPerClass)
-    print(numWordsPerClass)
-    print(len(words))
+    #print(uniqueWordsPerClass)
+    #print(numWordsPerClass)
+    #print(len(words))
 
     return (probWordGivenClass, uniqueWordsPerClass, numWordsPerClass)
     
@@ -95,7 +92,7 @@ def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior)
 
     probWordGivenClass, uniqueWordsPerClass, numWordsPerClass = trainClassifier(train_set, train_labels, smoothing_parameter)
 
-    print(probWordGivenClass[('section', 0)])
+    #print(probWordGivenClass[('section', 0)])
 
     dev_labels = []
 
@@ -105,6 +102,7 @@ def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior)
         probHamGivenWord = math.log(pos_prior)
         probSpamGivenWord = math.log(1 - pos_prior)
         for word in doc:
+            word = word.lower()
             if (word, 0) not in probWordGivenClass:
                 continue
             if probWordGivenClass[(word, 0)] == 0:
@@ -121,7 +119,7 @@ def naiveBayes(train_set, train_labels, dev_set, smoothing_parameter, pos_prior)
         else:
             dev_labels.append(0)
 
-    print(dev_labels)
+    #print(dev_labels)
 
     return dev_labels
     
