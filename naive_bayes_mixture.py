@@ -131,11 +131,11 @@ def naiveBayesMixture(train_set, train_labels, dev_set, bigram_lambda,unigram_sm
             if (bigram, 0) not in probBigramGivenClass:
                 continue
             if probBigramGivenClass[(bigram, 0)] == 0:
-                probSpamGivenBigram += math.log(bigram_smoothing_parameter / (numBigramsPerClass[0] + uniqueWords * bigram_smoothing_parameter))
+                probSpamGivenBigram += math.log(bigram_smoothing_parameter / (numBigramsPerClass[0] + uniqueBigrams * bigram_smoothing_parameter))
             else:
                 probSpamGivenBigram += probBigramGivenClass[(bigram, 0)]
             if probBigramGivenClass[(bigram, 1)] == 0:
-                probHamGivenBigram += math.log(bigram_smoothing_parameter / (numBigramsPerClass[1] + uniqueWords * bigram_smoothing_parameter))
+                probHamGivenBigram += math.log(bigram_smoothing_parameter / (numBigramsPerClass[1] + uniqueBigrams * bigram_smoothing_parameter))
             else:
                 probHamGivenBigram += probBigramGivenClass[(bigram, 1)]
 
