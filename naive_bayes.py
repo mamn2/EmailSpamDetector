@@ -46,8 +46,8 @@ def trainClassifier(train_set, train_labels, laplace):
     uniqueWords = uniqueWordsPerClass[0] + uniqueWordsPerClass[1]
 
     for word in words:
-        probWordGivenClass[(word, 0)] = math.log(words[word][0] + laplace) / (numWordsPerClass[0] + uniqueWords * laplace)
-        probWordGivenClass[(word, 1)] = math.log(words[word][1] + laplace) / (numWordsPerClass[1] + uniqueWords * laplace)
+        probWordGivenClass[(word, 0)] = math.log((words[word][0] + laplace) / (numWordsPerClass[0] + uniqueWords * laplace))
+        probWordGivenClass[(word, 1)] = math.log((words[word][1] + laplace) / (numWordsPerClass[1] + uniqueWords * laplace))
 
         #if words[word][1] > 10:
         #    print(word + str(words[word]))
