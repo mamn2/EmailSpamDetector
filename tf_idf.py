@@ -30,11 +30,13 @@ def numDocsWithWord(train_set):
             if word in uniqueWordsInDoc:
                 continue
             else:
-                uniqueWordsInDoc.update([word])
+                uniqueWordsInDoc.add(word)
                 if word in words:
                     words[word] += 1
                 else:
                     words[word] = 1
+
+    print(words['well'])
     return words
 
 
@@ -59,18 +61,16 @@ def compute_tf_idf(train_set, train_labels, dev_set):
     numDocsWithToken = numDocsWithWord(train_set)
     toReturn = []
 
-    for doc in train_set:
+    for doc in dev_set:
         numTimesInDoc = {}
-        totalWordsDoc = 0
         highestTFIDF = ("", -1)
         for word in doc:
-            totalWordsDoc += 1
             if word in numTimesInDoc:
                 numTimesInDoc[word] += 1
             else:
                 numTimesInDoc[word] = 1
         for word in numTimesInDoc:
-            tf_idf = (numTimesInDoc[word] / totalWordsDoc) * math.log(len(train_set) / (1 + numDocsWithToken[word]))
+            tf_idf = (numTimesInDoc[word] / len(doc)) * math.log(len(train_set) / (1 + numDocsWithToken.get(word, 0)))
             if tf_idf > highestTFIDF[1]:
                 highestTFIDF = (word, tf_idf)
         toReturn.append(highestTFIDF[0])
