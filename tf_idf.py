@@ -21,6 +21,23 @@ from collections import Counter, defaultdict
 import time
 import operator
 
+def numDocsWithWord(train_set):
+
+    words = {}
+    for doc in train_set:
+        uniqueWordsInDoc = set()
+        for word in doc:
+            if word in uniqueWordsInDoc:
+                continue
+            else:
+                uniqueWordsInDoc.update([word])
+                if word in words:
+                    words[word] += 1
+                else:
+                    words[word] = 1
+    return words
+
+
 
 def compute_tf_idf(train_set, train_labels, dev_set):
     """
@@ -39,11 +56,24 @@ def compute_tf_idf(train_set, train_labels, dev_set):
             Returned list should have same size as dev_set (one word from each dev_set document)
     """
 
+    numDocsWithToken = numDocsWithWord(train_set)
+    toReturn = []
 
-
-    # TODO: Write your code here
-    
-
-
+    for doc in train_set:
+        numTimesInDoc = {}
+        totalWordsDoc = 0
+        highestTFIDF = ("", -1)
+        for word in doc:
+            totalWordsDoc += 1
+            if word in numTimesInDoc:
+                numTimesInDoc[word] += 1
+            else:
+                numTimesInDoc[word] = 1
+        for word in numTimesInDoc:
+            tf_idf = (numTimesInDoc[word] / totalWordsDoc) * math.log(len(train_set) / (1 + numDocsWithToken[word]))
+            if tf_idf > highestTFIDF[1]:
+                highestTFIDF = (word, tf_idf)
+        toReturn.append(highestTFIDF[0])
+        
     # return list of words (should return a list, not numpy array or similar)
-    return []
+    return toReturn
